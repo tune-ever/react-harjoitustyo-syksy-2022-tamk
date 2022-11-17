@@ -1,0 +1,19 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "name": "React programming",
+      "contexts": ["front_end_course", "fun"]
+    },
+    {
+      "id": 2,
+      "name": "vacuum cleaning",
+      "contexts": ["Home duty", "exercise"]
+    },
+    {
+      "id": 3,
+      "name": "Wc clean",
+      "contexts": ["Home duty"]
+    }
+  ]
+}
