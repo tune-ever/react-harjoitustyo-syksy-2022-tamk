@@ -3,7 +3,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Tasks from "./components/Tasks.js";
 import Info from "./components/Info.js";
-import Faq from "./components/Faq.js";
+import FreeTime from "./components/FreeTime.js";
 
 function App() {
   const navStyle = {
@@ -18,14 +18,14 @@ function App() {
         <Link style={navStyle} to="/info">
           Info
         </Link>
-        <Link style={navStyle} to="/faq">
-          Faq
+        <Link style={navStyle} to="/freeTime">
+          Free Time
         </Link>
       </nav>
       <Routes>
         <Route path="/" element={<Tasks />} />
         <Route path="/info" element={<Info />} />
-        <Route path="/faq" element={<Faq />} />
+        <Route path="/freeTime" element={<FreeTime />} />
       </Routes>
     </BrowserRouter>
   );
