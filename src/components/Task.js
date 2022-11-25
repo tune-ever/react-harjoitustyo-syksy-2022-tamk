@@ -9,7 +9,7 @@ const Task = props => {
   const contexts = props.task.contexts;
 
   // this function handles the submit
-  const handleSubmit = event => {
+  const handleNameSubmit = event => {
     // Prevents html refresh
     event.preventDefault();
     // Calls the changeName function passed down as props
@@ -29,7 +29,7 @@ const Task = props => {
     <div>
       {name}
       {/* This is a basic react form for updating task name:uses state etc. */}
-      <form type="submit" onSubmit={handleSubmit}>
+      <form type="submit" onSubmit={handleNameSubmit}>
         <input
           placeholder="update task name"
           type="text"
