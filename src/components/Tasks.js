@@ -39,7 +39,12 @@ const Tasks = () => {
     // Iterate tasks, find match, add the new context
     tasks.forEach(task => {
       if (task.id === id) {
-        task.contexts.push(newContext);
+        // Error handling: user can't add a duplicate context
+        if (!task.contexts.includes(newContext)) {
+          task.contexts.push(newContext);
+        } else {
+          alert("Duplicate value detected.");
+        }
       }
       newTasksArray.push(task);
     });
