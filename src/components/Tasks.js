@@ -59,7 +59,7 @@ const Tasks = () => {
       if (task.id === id) {
         // Filter out the context user wanted to remove:
         const newContexts = task.contexts.filter(
-          context => context != contextToRemove
+          context => context !== contextToRemove
         );
         // Update the contexts:
         task.contexts = newContexts;
@@ -67,6 +67,17 @@ const Tasks = () => {
       // Push task to duplicate:
       newTasksArray.push(task);
     });
+    setTasks(newTasksArray);
+  };
+
+  // Function to add a new task
+  const addTask = (name, contexts) => {
+    const newTasksArray = tasks;
+    const newTask = {
+      name: name,
+      contexts: contexts
+    };
+    newTasksArray.push(newTask);
     setTasks(newTasksArray);
   };
 
@@ -90,6 +101,7 @@ const Tasks = () => {
           ))}
         </ol>
       </section>
+      <newTask addtask={addTask} />
     </div>
   );
 };
