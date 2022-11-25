@@ -51,6 +51,21 @@ const Tasks = () => {
     setTasks(newTasksArray);
   };
 
+  // Function to remove a context:
+  const removeContext = (id, contextToRemove) => {
+    const newTasksArray = [];
+
+    // Iterate current tasks, find match, remove the context
+    tasks.forEach(task => {
+      if (task.id === id) {
+        // Map the contexts -> don't include the context user wants to remove.
+        task.contexts.map(context => !context === contextToRemove);
+      }
+      newTasksArray.push(tasks);
+    });
+    setTasks(newTasksArray);
+  };
+
   return (
     <div>
       <h2>Tasks</h2>
@@ -61,6 +76,7 @@ const Tasks = () => {
             <li key={task.id}>
               {/* Props: function addContext, function changeName, task object, key*/}
               <Task
+                removeContext={removeContext}
                 addContext={addContext}
                 changeName={changeName}
                 task={task}
