@@ -16,7 +16,7 @@ const Tasks = () => {
     const newTasksArray = [];
 
     // Iterate the array -> replace the match with new name
-    tasks.map(task => {
+    tasks.forEach(task => {
       // Found matching id?
       if (task.id === id) {
         // Push updated task
@@ -37,7 +37,7 @@ const Tasks = () => {
   const addContext = (id, newContext) => {
     const newTasksArray = [];
     // Iterate tasks, find match, add the new context
-    tasks.map(task => {
+    tasks.forEach(task => {
       if (task.id === id) {
         task.contexts.push(newContext);
       }
