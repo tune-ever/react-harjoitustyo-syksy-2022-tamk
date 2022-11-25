@@ -5,6 +5,8 @@ const Task = props => {
   const [nameInput, setNameInput] = useState([]);
   const [contextInput, setContextInput] = useState([]);
 
+  // props values:
+  const id = props.task.id;
   const name = props.task.name;
   const contexts = props.task.contexts;
 
@@ -14,15 +16,22 @@ const Task = props => {
     event.preventDefault();
     // Calls the changeName function passed down as props
     // Sends user input as parameter
-    props.changeName(props.task.id, nameInput);
+    props.changeName(id, nameInput);
     // set textbox to empty
     setNameInput("");
   };
 
+  // Function to handle the new context: calls parent elements
+  // function addContext
   const handleContextSubmit = event => {
     event.preventDefault();
     props.addContext(props.task.id, contextInput);
     setContextInput("");
+  };
+
+  // Function to handle user's click:
+  const handleClick = context => {
+    props.removeContext(id, context);
   };
 
   return (
@@ -40,7 +49,17 @@ const Task = props => {
       </form>
       <section>
         <p>Contexts:</p>
-        <ul>{contexts.map(context => <li key={context}>{context}</li>)}</ul>
+        {/* List the contexts: include a remove button for each */}
+        <ul>
+          {contexts.map(context => (
+            <li key={context}>
+              {context}
+              {/* onClick -> event -> callback fires when user clicks */}
+              <button onClick={() => handleClick(context)}>remove</button>
+            </li>
+          ))}
+        </ul>
+        {/* Basic react form to add a new context: */}
         <form type="submit" onSubmit={handleContextSubmit}>
           <input
             placeholder="Add a new context"
