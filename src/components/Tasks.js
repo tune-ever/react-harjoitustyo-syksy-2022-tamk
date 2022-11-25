@@ -4,7 +4,6 @@ import taskService from "../services/taskService";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
-  console.log(tasks);
 
   // First page load -> get tasks from db.json
   useEffect(() => {
@@ -54,14 +53,19 @@ const Tasks = () => {
   // Function to remove a context:
   const removeContext = (id, contextToRemove) => {
     const newTasksArray = [];
-
     // Iterate current tasks, find match, remove the context
     tasks.forEach(task => {
+      // Find the one task we want to update:
       if (task.id === id) {
-        // Map the contexts -> don't include the context user wants to remove.
-        task.contexts.map(context => !context === contextToRemove);
+        // Filter out the context user wanted to remove:
+        const newContexts = task.contexts.filter(
+          context => context != contextToRemove
+        );
+        // Update the contexts:
+        task.contexts = newContexts;
       }
-      newTasksArray.push(tasks);
+      // Push task to duplicate:
+      newTasksArray.push(task);
     });
     setTasks(newTasksArray);
   };
