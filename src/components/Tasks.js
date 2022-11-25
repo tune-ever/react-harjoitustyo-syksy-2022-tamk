@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Task from "./Task.js";
 import taskService from "../services/taskService";
+import AddTask from "./AddTask";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -101,7 +102,7 @@ const Tasks = () => {
           ))}
         </ol>
       </section>
-      <newTask addtask={addTask} />
+      <AddTask addtask={addTask} />
     </div>
   );
 };
