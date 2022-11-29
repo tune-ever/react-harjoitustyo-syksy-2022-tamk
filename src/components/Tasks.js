@@ -25,6 +25,8 @@ const Tasks = () => {
           name: newName,
           contexts: task.contexts
         };
+        // Here we send the new task to database
+        taskService.updateById(id, newTask);
         newTasksArray.push(newTask);
       } else {
         newTasksArray.push(task);
@@ -41,7 +43,10 @@ const Tasks = () => {
       if (task.id === id) {
         // Error handling: user can't add a duplicate context
         if (!task.contexts.includes(newContext)) {
+          // Here happens the new context update:
           task.contexts.push(newContext);
+          // Here we send the new task to database to keep it up to date
+          taskService.updateById(id, task);
         } else {
           alert("Duplicate value detected.");
         }
@@ -64,6 +69,8 @@ const Tasks = () => {
         );
         // Update the contexts:
         task.contexts = newContexts;
+        // Here we send the new task to database
+        taskService.updateById(id, task);
       }
       // Push task to duplicate:
       newTasksArray.push(task);
@@ -73,13 +80,29 @@ const Tasks = () => {
 
   // Function to add a new task
   const addTask = (name, contexts) => {
-    const newTasksArray = tasks;
     const newTask = {
       name: name,
       contexts: contexts
     };
-    newTasksArray.push(newTask);
-    setTasks(newTasksArray);
+    // Post new task to database
+    // Chain of calls:
+    // First post
+    // then
+    // Update state (to keep ids in sync)
+    taskService.addTask(newTask).then(() => {
+      taskService.getAll().then(res => setTasks(res.data));
+    });
+  };
+
+  // Function to remove a task from the list.
+  const removeTask = id => {
+    let newTaskList = [];
+    // filter out the match:
+    newTaskList = tasks.filter(task => task.id !== id);
+
+    // Delete from database:
+    taskService.deleteTask(id);
+    setTasks(newTaskList);
   };
 
   return (
@@ -90,8 +113,9 @@ const Tasks = () => {
         <ol>
           {tasks.map(task => (
             <li key={task.id}>
-              {/* Props: function addContext, function changeName, task object, key*/}
+              {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
               <Task
+                removeTask={removeTask}
                 removeContext={removeContext}
                 addContext={addContext}
                 changeName={changeName}
@@ -102,7 +126,7 @@ const Tasks = () => {
           ))}
         </ol>
       </section>
-      <AddTask addtask={addTask} />
+      <AddTask addTask={addTask} />
     </div>
   );
 };
