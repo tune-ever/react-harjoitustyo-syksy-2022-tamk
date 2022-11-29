@@ -35,7 +35,7 @@ const Task = props => {
   };
 
   return (
-    <div>
+    <div style={{ border: "2px solid black" }}>
       {name}
       {/* This is a basic react form for updating task name:uses state etc. */}
       <form type="submit" onSubmit={handleNameSubmit}>
@@ -62,6 +62,7 @@ const Task = props => {
         {/* Basic react form to add a new context: */}
         <form type="submit" onSubmit={handleContextSubmit}>
           <input
+            style={{ marginLeft: 25 }}
             placeholder="Add a new context"
             type="text"
             value={contextInput}
@@ -70,6 +71,8 @@ const Task = props => {
           <input type="submit" />
         </form>
       </section>
+      {/* A button to remove this task */}
+      <button onClick={() => props.removeTask(id)}>Remove task</button>
     </div>
   );
 };
