@@ -1,19 +1,29 @@
 {
   "tasks": [
     {
-      "id": 1,
-      "name": "React programming",
-      "contexts": ["front_end_course", "fun"]
-    },
-    {
       "id": 2,
-      "name": "vacuum cleaning",
-      "contexts": ["Home duty", "exercise"]
+      "name": "Vacuum cleaning",
+      "contexts": [
+        "Home duty",
+        "More"
+      ]
     },
     {
-      "id": 3,
-      "name": "Wc clean",
-      "contexts": ["Home duty"]
+      "id": 6,
+      "name": "everything working",
+      "contexts": [
+        "test"
+      ]
+    },
+    {
+      "name": "More tasks",
+      "contexts": [],
+      "id": 7
+    },
+    {
+      "name": "Testing",
+      "contexts": [],
+      "id": 9
     }
   ]
 }
