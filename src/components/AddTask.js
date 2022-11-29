@@ -11,10 +11,10 @@ const AddTask = props => {
     // This prevents default refresh
     event.preventDefault();
     const contexts = [];
-    contexts.push(contextInput);
-    contexts.push(contextInputTwo);
-    contexts.push(contextInputThree);
-
+    // Push all the contexts if they exist:
+    if (contextInput.length > 0) contexts.push(contextInput);
+    if (contextInputTwo.length > 0) contexts.push(contextInputTwo);
+    if (contextInputThree.length > 0) contexts.push(contextInputThree);
     // Name is required: a check
     if (nameInput) {
       // Call parent element's function addTask()
@@ -30,6 +30,7 @@ const AddTask = props => {
 
   return (
     <form type="submit" onSubmit={handleTaskSubmit}>
+      <h4>Add a new task</h4>
       <input
         placeholder="Task name"
         type="text"
