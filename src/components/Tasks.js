@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import Task from "./Task.js";
 import taskService from "../services/taskService";
 import AddTask from "./AddTask";
-import FilterButton from "./FilterButton";
+import FilterElement from "./FilterElement";
 
 const Tasks = () => {
   // One state to store all the tasks in an array:
   const [tasks, setTasks] = useState([]);
-  const [filters, setFilters] = useState(["Programming", "Outdoor"]);
+  const [filters, setFilters] = useState(["Programming", "Inside"]);
 
   // First page load -> get tasks from db.json
   useEffect(() => {
@@ -113,10 +113,7 @@ const Tasks = () => {
       <h2>Tasks</h2>
       <section>
         <h3>Current tasks</h3>
-        {/* Render the filters as filterButton elements */}
-        {filters.map(filter => (
-          <FilterButton key={filter} filter={filter} />
-        ))}
+        <FilterElement tasks={tasks} />
         <ol>
           {/* 
             Filter the tasks -> for each task iterate filters ->
