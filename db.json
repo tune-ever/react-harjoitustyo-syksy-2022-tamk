@@ -2,28 +2,33 @@
   "tasks": [
     {
       "id": 2,
-      "name": "Vacuum cleaning",
-      "contexts": [
-        "Home duty",
-        "More"
-      ]
+      "name": "React programming",
+      "contexts": ["Tamk", "Programming"]
     },
     {
       "id": 6,
-      "name": "everything working",
-      "contexts": [
-        "test"
-      ]
+      "name": "Backend programming",
+      "contexts": ["Tamk"]
     },
     {
-      "name": "More tasks",
-      "contexts": [],
+      "name": "Wc stuck",
+      "contexts": ["Inside"],
       "id": 7
     },
     {
+      "name": "Snow work",
+      "contexts": ["Outdoor"],
+      "id": 8
+    },
+    {
+      "id": 9,
+      "name": "javascript -practice",
+      "contexts": []
+    },
+    {
       "name": "Testing",
-      "contexts": [],
-      "id": 9
+      "contexts": ["Programming"],
+      "id": 10
     }
   ]
 }
