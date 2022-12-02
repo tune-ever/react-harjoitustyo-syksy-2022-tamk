@@ -14,6 +14,7 @@ const Tasks = () => {
     taskService.getAll().then(res => setTasks(res.data));
   }, []);
 
+  // Clears active filters: default to: "all"
   const clearFilters = () => {
     setFilters(["all"]);
   };
@@ -151,29 +152,24 @@ const Tasks = () => {
             .map() and is rendered.
             If filter array is empty, all tasks pass the filter
            */}
-          {tasks
-            /*.filter(task =>
-              filters.length > 0
-                ? filters.find(filter => task.contexts.includes(filter))
-                : true
-            )*/
-            .map(
-              task =>
-                (filters[0] === "all" ||
-                  filters.some(filter => task.contexts.includes(filter))) && (
-                  <li key={task.id}>
-                    {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
-                    <Task
-                      removeTask={removeTask}
-                      removeContext={removeContext}
-                      addContext={addContext}
-                      changeName={changeName}
-                      task={task}
-                      key={task.id}
-                    />
-                  </li>
-                )
-            )}
+          {tasks.map(
+            task =>
+              (filters[0] === "all" ||
+                filters.some(filter => task.contexts.includes(filter))) && (
+                <li key={task.id}>
+                  {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
+                  <Task
+                    tasks={tasks}
+                    removeTask={removeTask}
+                    removeContext={removeContext}
+                    addContext={addContext}
+                    changeName={changeName}
+                    task={task}
+                    key={task.id}
+                  />
+                </li>
+              )
+          )}
         </ol>
       </section>
       <AddTask addTask={addTask} />
