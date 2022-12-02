@@ -3,7 +3,8 @@ const FilterElement = props => {
 
   // Contexts array from tasks prop:
   const contextArray = [];
-  // Here we find all the necessary filter buttons:
+  // Find all necessary context buttons to render: (don't include duplicates.)
+  // We simply extract contexts from the tasks array.
   props.tasks.forEach(task => {
     task.contexts.forEach(context => {
       if (!contextArray.includes(context)) contextArray.push(context);
