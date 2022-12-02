@@ -3,31 +3,44 @@
     {
       "id": 2,
       "name": "React programming",
-      "contexts": ["Tamk", "Programming"]
+      "contexts": [
+        "Programming",
+        "Tamk"
+      ]
     },
     {
-      "id": 6,
-      "name": "Backend programming",
-      "contexts": ["Tamk"]
-    },
-    {
-      "name": "Wc stuck",
-      "contexts": ["Inside"],
-      "id": 7
+      "id": 3,
+      "name": "Backend",
+      "contexts": [
+        "Tamk",
+        "Programming"
+      ]
     },
     {
       "name": "Snow work",
-      "contexts": ["Outdoor"],
+      "contexts": [
+        "Outside",
+        "Maintenance",
+        "Exercise"
+      ],
+      "id": 7
+    },
+    {
+      "name": "Wc stuck",
+      "contexts": [
+        "Inside",
+        "Maintenance"
+      ],
       "id": 8
     },
     {
-      "id": 9,
-      "name": "javascript -practice",
-      "contexts": []
-    },
-    {
-      "name": "Testing",
-      "contexts": ["Programming"],
+      "name": "Drink coffee",
+      "contexts": [
+        "Eating",
+        "Cooking",
+        "Fun",
+        "Inside"
+      ],
       "id": 10
     }
   ]
