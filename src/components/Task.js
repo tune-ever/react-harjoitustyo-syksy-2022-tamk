@@ -29,11 +29,6 @@ const Task = props => {
     setContextInput("");
   };
 
-  // Function to handle user's click:
-  const handleClick = context => {
-    props.removeContext(id, context);
-  };
-
   return (
     <div style={{ border: "2px solid black" }}>
       {name}
@@ -54,8 +49,10 @@ const Task = props => {
           {contexts.map(context => (
             <li key={context}>
               {context}
-              {/* onClick -> event -> callback fires when user clicks */}
-              <button onClick={() => handleClick(context)}>remove</button>
+              {/* onClick remove, call parent elem. function removecontext */}
+              <button onClick={() => props.removeContext(id, context)}>
+                remove
+              </button>
             </li>
           ))}
         </ul>
