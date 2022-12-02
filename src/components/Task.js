@@ -3,8 +3,16 @@ import { useState } from "react";
 // This component has basic react form: value is state!
 const Task = props => {
   const [nameInput, setNameInput] = useState([]);
-  const [contextInput, setContextInput] = useState([]);
+  const [contextInput, setContextInput] = useState("");
 
+  // Contexts array from tasks prop:
+  const contextArray = [];
+  // Find all individual contexts from the tasks array:
+  props.tasks.forEach(task => {
+    task.contexts.forEach(context => {
+      if (!contextArray.includes(context)) contextArray.push(context);
+    });
+  });
   // props values:
   const id = props.task.id;
   const name = props.task.name;
@@ -28,7 +36,6 @@ const Task = props => {
     props.addContext(props.task.id, contextInput);
     setContextInput("");
   };
-
   return (
     <div style={{ border: "2px solid black" }}>
       {name}
@@ -59,13 +66,25 @@ const Task = props => {
         {/* Basic react form to add a new context: */}
         <form type="submit" onSubmit={handleContextSubmit}>
           <input
+            name="textContextInput"
             style={{ marginLeft: 25 }}
             placeholder="Add a new context"
             type="text"
             value={contextInput}
             onChange={e => setContextInput(e.target.value)}
           />
-          <input type="submit" />
+          <select
+            name="selectContextInput"
+            value={contextInput}
+            onChange={e => setContextInput(e.target.value)}
+          >
+            {contextArray.map(context => (
+              <option key={context} value={context}>
+                {context}
+              </option>
+            ))}
+          </select>
+          <input type="submit" value="Submit" />
         </form>
       </section>
       {/* A button to remove this task */}
