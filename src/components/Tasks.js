@@ -7,12 +7,37 @@ import FilterElement from "./FilterElement";
 const Tasks = () => {
   // One state to store all the tasks in an array:
   const [tasks, setTasks] = useState([]);
-  const [filters, setFilters] = useState(["Programming", "Inside"]);
+  const [filters, setFilters] = useState(["all"]);
 
   // First page load -> get tasks from db.json
   useEffect(() => {
     taskService.getAll().then(res => setTasks(res.data));
   }, []);
+
+  const clearFilters = () => {
+    setFilters(["all"]);
+  };
+
+  // Function that fires when user clicks filter button:
+  const handleFilterClick = context => {
+    // If all was activated, remove it:
+    if (filters[0] === "all") {
+      setFilters([context]);
+    } else {
+      // if filter is already active we remove it:
+      if (filters.includes(context)) {
+        let newFilters = [];
+        // Filter out duplicate:
+        newFilters = filters.filter(filter => filter !== context);
+        // If filters are now empty, set filter to default: "all":
+        if (newFilters.length === 0) newFilters.push("all");
+        setFilters(newFilters);
+      } else {
+        // Push the new context to the filter state:
+        setFilters([...filters, context]);
+      }
+    }
+  };
 
   // Function to change the name of a task
   const changeName = (id, newName) => {
@@ -113,7 +138,12 @@ const Tasks = () => {
       <h2>Tasks</h2>
       <section>
         <h3>Current tasks</h3>
-        <FilterElement tasks={tasks} />
+        <FilterElement
+          clearFilters={clearFilters}
+          handleFilterClick={handleFilterClick}
+          filters={filters}
+          tasks={tasks}
+        />
         <ol>
           {/* 
             Filter the tasks -> for each task iterate filters ->
@@ -122,24 +152,28 @@ const Tasks = () => {
             If filter array is empty, all tasks pass the filter
            */}
           {tasks
-            .filter(task =>
+            /*.filter(task =>
               filters.length > 0
                 ? filters.find(filter => task.contexts.includes(filter))
                 : true
-            )
-            .map(task => (
-              <li key={task.id}>
-                {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
-                <Task
-                  removeTask={removeTask}
-                  removeContext={removeContext}
-                  addContext={addContext}
-                  changeName={changeName}
-                  task={task}
-                  key={task.id}
-                />
-              </li>
-            ))}
+            )*/
+            .map(
+              task =>
+                (filters[0] === "all" ||
+                  filters.some(filter => task.contexts.includes(filter))) && (
+                  <li key={task.id}>
+                    {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
+                    <Task
+                      removeTask={removeTask}
+                      removeContext={removeContext}
+                      addContext={addContext}
+                      changeName={changeName}
+                      task={task}
+                      key={task.id}
+                    />
+                  </li>
+                )
+            )}
         </ol>
       </section>
       <AddTask addTask={addTask} />
