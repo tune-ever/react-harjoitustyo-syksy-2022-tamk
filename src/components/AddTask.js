@@ -3,9 +3,18 @@ import { useState } from "react";
 // This component is a simple form to add a new task
 const AddTask = props => {
   const [nameInput, setNameInput] = useState([]);
-  const [contextInput, setContextInput] = useState([]);
-  const [contextInputTwo, setContextInputTwo] = useState([]);
-  const [contextInputThree, setContextInputThree] = useState([]);
+  const [contextInput, setContextInput] = useState("");
+  const [contextInputTwo, setContextInputTwo] = useState("");
+  const [contextInputThree, setContextInputThree] = useState("");
+
+  // Contexts array from tasks prop:
+  const contextArray = [];
+  // Find all individual contexts from the tasks array:
+  props.tasks.forEach(task => {
+    task.contexts.forEach(context => {
+      if (!contextArray.includes(context)) contextArray.push(context);
+    });
+  });
 
   const handleTaskSubmit = event => {
     // This prevents default refresh
@@ -44,6 +53,17 @@ const AddTask = props => {
         value={contextInput}
         onChange={e => setContextInput(e.target.value)}
       />
+      <select
+        name="selectContextInput"
+        value={contextInput}
+        onChange={e => setContextInput(e.target.value)}
+      >
+        {contextArray.map(context => (
+          <option key={context} value={context}>
+            {context}
+          </option>
+        ))}
+      </select>
       <br />
       <input
         placeholder="Context name"
@@ -51,6 +71,17 @@ const AddTask = props => {
         value={contextInputTwo}
         onChange={e => setContextInputTwo(e.target.value)}
       />
+      <select
+        name="selectContextInput"
+        value={contextInputTwo}
+        onChange={e => setContextInputTwo(e.target.value)}
+      >
+        {contextArray.map(context => (
+          <option key={context} value={context}>
+            {context}
+          </option>
+        ))}
+      </select>
       <br />
       <input
         placeholder="Context name"
@@ -58,6 +89,17 @@ const AddTask = props => {
         value={contextInputThree}
         onChange={e => setContextInputThree(e.target.value)}
       />
+      <select
+        name="selectContextInput"
+        value={contextInputThree}
+        onChange={e => setContextInputThree(e.target.value)}
+      >
+        {contextArray.map(context => (
+          <option key={context} value={context}>
+            {context}
+          </option>
+        ))}
+      </select>
       <br />
       <input type="submit" />
     </form>
