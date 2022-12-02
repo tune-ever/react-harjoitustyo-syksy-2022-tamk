@@ -172,7 +172,7 @@ const Tasks = () => {
           )}
         </ol>
       </section>
-      <AddTask addTask={addTask} />
+      <AddTask tasks={tasks} addTask={addTask} />
     </div>
   );
 };
