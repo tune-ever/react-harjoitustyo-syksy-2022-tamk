@@ -19,6 +19,16 @@ const Tasks = () => {
     setFilters(["all"]);
   };
 
+  // Contexts array from tasks:
+  const contextArray = [];
+  // Find all necessary context buttons to render: (don't include duplicates.)
+  // We simply extract contexts from the tasks array.
+  tasks.forEach(task => {
+    task.contexts.forEach(context => {
+      if (!contextArray.includes(context)) contextArray.push(context);
+    });
+  });
+
   // Function that fires when user clicks filter button:
   const handleFilterClick = context => {
     // If all was activated, remove it:
@@ -140,10 +150,10 @@ const Tasks = () => {
       <section>
         <h3>Current tasks</h3>
         <FilterElement
+          contextArray={contextArray}
           clearFilters={clearFilters}
           handleFilterClick={handleFilterClick}
           filters={filters}
-          tasks={tasks}
         />
         <ol>
           {/* 
@@ -159,6 +169,7 @@ const Tasks = () => {
                 <li key={task.id}>
                   {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
                   <Task
+                    contextArray={contextArray}
                     tasks={tasks}
                     removeTask={removeTask}
                     removeContext={removeContext}
