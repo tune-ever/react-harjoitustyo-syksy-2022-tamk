@@ -5,14 +5,6 @@ const Task = props => {
   const [nameInput, setNameInput] = useState([]);
   const [contextInput, setContextInput] = useState("");
 
-  // Contexts array from tasks prop:
-  const contextArray = [];
-  // Find all individual contexts from the tasks array:
-  props.tasks.forEach(task => {
-    task.contexts.forEach(context => {
-      if (!contextArray.includes(context)) contextArray.push(context);
-    });
-  });
   // props values:
   const id = props.task.id;
   const name = props.task.name;
@@ -73,12 +65,13 @@ const Task = props => {
             value={contextInput}
             onChange={e => setContextInput(e.target.value)}
           />
+          {/* Simple html select form: current contexts as options. */}
           <select
             name="selectContextInput"
             value={contextInput}
             onChange={e => setContextInput(e.target.value)}
           >
-            {contextArray.map(context => (
+            {props.contextArray.map(context => (
               <option key={context} value={context}>
                 {context}
               </option>
