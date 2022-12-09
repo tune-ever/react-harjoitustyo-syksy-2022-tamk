@@ -22,6 +22,13 @@ const Info = () => {
           Add a new task: scroll to the bottom of the page: type task name and
           contexts, then press submit button
         </li>
+        <li>
+          Filtering tasks: press filter buttons. Show all button clears filters.
+        </li>
+        <li>
+          Moving items from undone to done: drag and drop with mouse. Move to
+          other list.
+        </li>
       </ul>
       <footer>No copyright material have been used on this site.</footer>
     </div>
