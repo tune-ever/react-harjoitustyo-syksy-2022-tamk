@@ -9,6 +9,7 @@ const Task = props => {
   const id = props.task.id;
   const name = props.task.name;
   const contexts = props.task.contexts;
+  const status = props.task.status;
 
   // this function handles the submit
   const handleNameSubmit = event => {
@@ -16,7 +17,7 @@ const Task = props => {
     event.preventDefault();
     // Calls the changeName function passed down as props
     // Sends user input as parameter
-    props.changeName(id, nameInput);
+    props.changeName(id, nameInput, status);
     // set textbox to empty
     setNameInput("");
   };
@@ -28,8 +29,14 @@ const Task = props => {
     props.addContext(props.task.id, contextInput);
     setContextInput("");
   };
+
+  const borderStyle =
+    props.task.status === "done"
+      ? { border: "2px solid green" }
+      : { border: "2px solid blue" };
+
   return (
-    <div style={{ border: "2px solid black" }}>
+    <div style={borderStyle}>
       {name}
       {/* This is a basic react form for updating task name:uses state etc. */}
       <form type="submit" onSubmit={handleNameSubmit}>
@@ -59,7 +66,6 @@ const Task = props => {
         <form type="submit" onSubmit={handleContextSubmit}>
           <input
             name="textContextInput"
-            style={{ marginLeft: 25 }}
             placeholder="Add a new context"
             type="text"
             value={contextInput}
