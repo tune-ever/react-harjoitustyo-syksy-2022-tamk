@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Task from "./Task.js";
 import taskService from "../services/taskService";
 import AddTask from "./AddTask";
@@ -8,6 +9,7 @@ const Tasks = () => {
   // One state to store all the tasks in an array:
   const [tasks, setTasks] = useState([]);
   const [filters, setFilters] = useState(["all"]);
+  const lists = ["undone", "done"];
 
   // First page load -> get tasks from db.json
   useEffect(() => {
@@ -51,7 +53,7 @@ const Tasks = () => {
   };
 
   // Function to change the name of a task
-  const changeName = (id, newName) => {
+  const changeName = (id, newName, status) => {
     const newTasksArray = [];
 
     // Iterate the array -> replace the match with new name
@@ -63,6 +65,7 @@ const Tasks = () => {
           id: id,
           name: newName,
           contexts: task.contexts,
+          status: status,
         };
         // Here we send the new task to database
         taskService.updateById(id, newTask);
@@ -122,6 +125,7 @@ const Tasks = () => {
     const newTask = {
       name: name,
       contexts: contexts,
+      status: "undone",
     };
     // Post new task to database
     // Chain of calls:
@@ -144,6 +148,29 @@ const Tasks = () => {
     setTasks(newTaskList);
   };
 
+  const onDragEnd = (res, taskId) => {
+    // Get destination and source objects from responder -object:
+    const { source, destination } = res;
+
+    if (source.droppableId !== destination.droppableId) {
+      // Info to send to server
+      const status = destination.droppableId;
+      const id = Number(res.draggableId);
+      // Send the update to database: patch request -> only update status:
+      taskService.changeStatusById(id, status);
+      // Also need to update state so react updates ui instantly:
+      let newTaskList = [];
+      newTaskList = tasks.map(task => {
+        if (task.id === id) {
+          task.status = status;
+        }
+        return task;
+      });
+
+      setTasks(newTaskList);
+    }
+  };
+
   return (
     <div>
       <h2>Tasks</h2>
@@ -155,33 +182,67 @@ const Tasks = () => {
           handleFilterClick={handleFilterClick}
           filters={filters}
         />
-        <ol>
-          {/* 
+        <DragDropContext onDragEnd={onDragEnd}>
+          {/* We want two droppable lists: Undone and done. */}
+          {lists.map(listName => (
+            <div key={listName}>
+              <h3>{listName}</h3>
+              <Droppable droppableId={listName} key={listName}>
+                {provided => {
+                  return (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      {/* 
             Filter the tasks -> for each task iterate filters ->
             if filters matches any context of a task: it passes on to
             .map() and is rendered.
             If filter array is empty, all tasks pass the filter
            */}
-          {tasks.map(
-            task =>
-              (filters[0] === "all" ||
-                filters.some(filter => task.contexts.includes(filter))) && (
-                <li key={task.id}>
-                  {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
-                  <Task
-                    contextArray={contextArray}
-                    tasks={tasks}
-                    removeTask={removeTask}
-                    removeContext={removeContext}
-                    addContext={addContext}
-                    changeName={changeName}
-                    task={task}
-                    key={task.id}
-                  />
-                </li>
-              )
-          )}
-        </ol>
+                      {tasks.map(
+                        (task, index) =>
+                          /* Apply filters here to whole task list: */
+                          (filters[0] === "all" ||
+                            filters.some(filter =>
+                              task.contexts.includes(filter)
+                            )) &&
+                          /* Check if task is done or not? conditional rendering */
+                          task.status === listName && (
+                            <Draggable
+                              key={task.id}
+                              draggableId={task.id.toString()}
+                              index={index}
+                            >
+                              {provided => {
+                                return (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
+                                    <Task
+                                      contextArray={contextArray}
+                                      tasks={tasks}
+                                      removeTask={removeTask}
+                                      removeContext={removeContext}
+                                      addContext={addContext}
+                                      changeName={changeName}
+                                      task={task}
+                                      key={task.id}
+                                    />
+                                  </div>
+                                );
+                              }}
+                            </Draggable>
+                          )
+                      )}
+                      {provided.placeholder}
+                    </div>
+                  );
+                }}
+              </Droppable>
+            </div>
+          ))}
+        </DragDropContext>
       </section>
       <AddTask tasks={tasks} addTask={addTask} />
     </div>
