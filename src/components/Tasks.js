@@ -256,49 +256,55 @@ const Tasks = () => {
           handleFilterClick={handleFilterClick}
           filters={filters}
         />
-        <DragDropContext onDragEnd={onDragEnd}>
-          {/* We want two droppable lists: Undone and done. */}
-          {lists.map(list => (
-            <div key={list.id}>
-              <h3>{list.name}</h3>
-              <Droppable droppableId={list.name} key={list.id}>
-                {provided => (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {list.tasks.map((taskId, index) => (
-                      <Draggable
-                        key={taskId}
-                        draggableId={taskId.toString()}
-                        index={index}
-                      >
-                        {provided => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            {/* Render task element: find with current id from tasks
-                             */}
-                            <Task
-                              filters={filters}
-                              listId={list.id}
-                              task={tasks.find(task => task.id === taskId)}
-                              contextArray={contextArray}
-                              changeName={changeName}
-                              removeContext={removeContext}
-                              addContext={addContext}
-                              removeTask={removeTask}
-                            />
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          ))}
-        </DragDropContext>
+        <section className="lists">
+          <DragDropContext onDragEnd={onDragEnd}>
+            {/* We want two droppable lists: Undone and done. */}
+            {lists.map(list => (
+              <div key={list.id}>
+                <h3>{list.name}</h3>
+                <Droppable droppableId={list.name} key={list.id}>
+                  {provided => (
+                    <div
+                      className="droppableList"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {list.tasks.map((taskId, index) => (
+                        <Draggable
+                          key={taskId}
+                          draggableId={taskId.toString()}
+                          index={index}
+                        >
+                          {provided => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              {/* Render task element: find with current id from tasks
+                               */}
+                              <Task
+                                filters={filters}
+                                listId={list.id}
+                                task={tasks.find(task => task.id === taskId)}
+                                contextArray={contextArray}
+                                changeName={changeName}
+                                removeContext={removeContext}
+                                addContext={addContext}
+                                removeTask={removeTask}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            ))}
+          </DragDropContext>
+        </section>
       </section>
       <AddTask tasks={tasks} addTask={addTask} />
     </div>
