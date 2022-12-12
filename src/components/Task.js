@@ -37,19 +37,19 @@ const Task = props => {
   )
     return (
       <div style={{ border: "2px solid black" }}>
-        {name}
+        <h4>{name}</h4>
         {/* This is a basic react form for updating task name:uses state etc. */}
         <form type="submit" onSubmit={handleNameSubmit}>
           <input
-            placeholder="update task name"
+            placeholder="uusi nimi"
             type="text"
             value={nameInput}
             onChange={e => setNameInput(e.target.value)}
           />
-          <input type="submit" />
+          <input type="submit" value="Lisää" />
         </form>
         <section>
-          <p>Contexts:</p>
+          <p>Kontekstit:</p>
           {/* List the contexts: include a remove button for each */}
           <ul>
             {contexts.map(context => (
@@ -57,7 +57,7 @@ const Task = props => {
                 {context}
                 {/* onClick remove, call parent elem. function removecontext */}
                 <button onClick={() => props.removeContext(id, context)}>
-                  remove
+                  poista
                 </button>
               </li>
             ))}
@@ -66,7 +66,7 @@ const Task = props => {
           <form type="submit" onSubmit={handleContextSubmit}>
             <input
               name="textContextInput"
-              placeholder="Add a new context"
+              placeholder="lisää konteksti"
               type="text"
               value={contextInput}
               onChange={e => setContextInput(e.target.value)}
@@ -83,12 +83,12 @@ const Task = props => {
                 </option>
               ))}
             </select>
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Lisää" />
           </form>
         </section>
         {/* A button to remove this task */}
         <button onClick={() => props.removeTask(id, props.listId)}>
-          Remove task
+          poista tehtävä
         </button>
       </div>
     );
