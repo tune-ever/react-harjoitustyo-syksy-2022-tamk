@@ -143,7 +143,8 @@ const Tasks = () => {
     // Update the new id to keep lists in sync:
     let newId = response.data.id;
     let updatedTaskList = lists[0].tasks;
-    updatedTaskList.push(newId);
+    // insert new id to beginning of list
+    updatedTaskList.unshift(newId);
     // Again create new lists array and update to state with new id added:
     let newListsArray = lists;
     newListsArray[0].tasks = updatedTaskList;
@@ -179,11 +180,10 @@ const Tasks = () => {
     // Delete from database:
     setTasks(newTaskList);
 
-    // send the updated tasks list to database:
-    taskService.deleteTask(id);
-
     // To database we send only the updated tasks array:
     const response = await listService.updateOrder(listId, updatedTaskList);
+    // send the updated tasks list to database:
+    const responseone = await taskService.deleteTask(id);
   };
 
   // Drag and drop on drag end:
@@ -247,9 +247,9 @@ const Tasks = () => {
 
   return (
     <div>
-      <h2>Tasks</h2>
+      <h2>Tehtävät</h2>
+      <AddTask className="newTask" tasks={tasks} addTask={addTask} />
       <section>
-        <h3>Current tasks</h3>
         <FilterElement
           contextArray={contextArray}
           clearFilters={clearFilters}
@@ -306,7 +306,6 @@ const Tasks = () => {
           </DragDropContext>
         </section>
       </section>
-      <AddTask tasks={tasks} addTask={addTask} />
     </div>
   );
 };
