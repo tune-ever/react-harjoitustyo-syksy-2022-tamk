@@ -2,18 +2,27 @@ import { useState, useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Task from "./Task.js";
 import taskService from "../services/taskService";
+import listService from "../services/listService";
 import AddTask from "./AddTask";
 import FilterElement from "./FilterElement";
 
 const Tasks = () => {
   // One state to store all the tasks in an array:
   const [tasks, setTasks] = useState([]);
+  // This state stores the task ids: they reference each task from tasks array.
+  // This lists state's purpose is to store the order of the elements:
+  const [lists, setLists] = useState([]);
+  // Filter state: array: default value: "all"
   const [filters, setFilters] = useState(["all"]);
-  const lists = ["undone", "done"];
 
-  // First page load -> get tasks from db.json
+  // Page load -> get tasks from db.json
   useEffect(() => {
     taskService.getAll().then(res => setTasks(res.data));
+  }, []);
+
+  // Page load -> get list orders from db.json:
+  useEffect(() => {
+    listService.getAll().then(res => setLists(res.data));
   }, []);
 
   // Clears active filters: default to: "all"
@@ -53,7 +62,7 @@ const Tasks = () => {
   };
 
   // Function to change the name of a task
-  const changeName = (id, newName, status) => {
+  const changeName = (id, newName) => {
     const newTasksArray = [];
 
     // Iterate the array -> replace the match with new name
@@ -65,7 +74,6 @@ const Tasks = () => {
           id: id,
           name: newName,
           contexts: task.contexts,
-          status: status,
         };
         // Here we send the new task to database
         taskService.updateById(id, newTask);
@@ -121,53 +129,119 @@ const Tasks = () => {
   };
 
   // Function to add a new task
-  const addTask = (name, contexts) => {
+  const addTask = async (name, contexts) => {
     const newTask = {
       name: name,
       contexts: contexts,
-      status: "undone",
     };
     // Post new task to database
     // Chain of calls:
     // First post
     // then
     // Update state (to keep ids in sync)
-    taskService.addTask(newTask).then(() => {
-      taskService.getAll().then(res => setTasks(res.data));
-    });
+    let response = await taskService.addTask(newTask);
+    // Update the new id to keep lists in sync:
+    let newId = response.data.id;
+    let updatedTaskList = lists[0].tasks;
+    updatedTaskList.push(newId);
+    // Again create new lists array and update to state with new id added:
+    let newListsArray = lists;
+    newListsArray[0].tasks = updatedTaskList;
+    setLists(newListsArray);
+
+    // Update new new list to db too:
+    listService.updateOrder(1, updatedTaskList);
+    taskService.getAll().then(res => setTasks(res.data));
   };
 
   // Function to remove a task from the list.
-  const removeTask = id => {
+  const removeTask = async (id, listId) => {
+    // Updating lists:
+    const listToUpdate = lists.find(list => list.id === listId);
+
+    // Remove the task from tasks array:
+    const updatedTaskList = listToUpdate.tasks.filter(taskId => taskId !== id);
+    listToUpdate.tasks = updatedTaskList;
+
+    // Replacing state array of lists:
+    const newListsArray = [];
+    // Iterate lists, replace source and destination with updated stuff:
+    lists.map(list => {
+      if (list.id === listId) newListsArray.push(listToUpdate);
+      else newListsArray.push(list);
+    });
+    // Update to state:
+    setLists(newListsArray);
+    // Updating tasks array:
     let newTaskList = [];
     // filter out the match:
     newTaskList = tasks.filter(task => task.id !== id);
-
     // Delete from database:
-    taskService.deleteTask(id);
     setTasks(newTaskList);
+
+    // send the updated tasks list to database:
+    taskService.deleteTask(id);
+
+    // To database we send only the updated tasks array:
+    const response = await listService.updateOrder(listId, updatedTaskList);
   };
 
-  const onDragEnd = (res, taskId) => {
-    // Get destination and source objects from responder -object:
-    const { source, destination } = res;
-
-    if (source.droppableId !== destination.droppableId) {
-      // Info to send to server
-      const status = destination.droppableId;
-      const id = Number(res.draggableId);
-      // Send the update to database: patch request -> only update status:
-      taskService.changeStatusById(id, status);
-      // Also need to update state so react updates ui instantly:
-      let newTaskList = [];
-      newTaskList = tasks.map(task => {
-        if (task.id === id) {
-          task.status = status;
-        }
-        return task;
+  // Drag and drop on drag end:
+  const onDragEnd = async res => {
+    const source = res.source;
+    const destination = res.destination;
+    // Find source and destination task list of ids from state:
+    const sourceList = lists.find(list => list.name === source.droppableId);
+    const destinationList = lists.find(
+      list => list.name === destination.droppableId
+    );
+    // same source:
+    if (source.droppableId === destination.droppableId) {
+      //First remove element from source:
+      const elementToRemove = sourceList.tasks.splice(source.index, 1);
+      // Add element to destination index:
+      sourceList.tasks.splice(destination.index, 0, elementToRemove[0]);
+      // Update to state:
+      // Replace the one list we want to replace:
+      const newListsArray = [];
+      // Replace the one we want to update:
+      lists.map(list => {
+        list.name === source.droppableId
+          ? newListsArray.push(sourceList)
+          : newListsArray.push(list);
       });
-
-      setTasks(newTaskList);
+      // Update state and send new order to database:
+      setLists(newListsArray);
+      // At end send source list to database:
+      listService.updateOrder(sourceList.id, sourceList.tasks);
+    }
+    // Different list?
+    else {
+      // Remove from the source list:
+      const elementToRemove = sourceList.tasks.splice(source.index, 1);
+      // Add to destination list:
+      destinationList.tasks.splice(destination.index, 0, elementToRemove[0]);
+      // Replacing state array of lists:
+      const newListsArray = [];
+      // Iterate lists, replace source and destination with updated stuff:
+      lists.map(list => {
+        if (list.name === source.droppableId) newListsArray.push(sourceList);
+        else if (list.name === destination.droppableId)
+          newListsArray.push(destinationList);
+        else newListsArray.push(list);
+      });
+      // Update to state:
+      setLists(newListsArray);
+      // At end send source and destination lists to database async api calls:
+      const response = await listService.updateOrder(
+        sourceList.id,
+        sourceList.tasks
+      );
+      // Async api call:
+      const responseTwo = await listService.updateOrder(
+        destinationList.id,
+        destinationList.tasks
+      );
     }
   };
 
@@ -184,61 +258,43 @@ const Tasks = () => {
         />
         <DragDropContext onDragEnd={onDragEnd}>
           {/* We want two droppable lists: Undone and done. */}
-          {lists.map(listName => (
-            <div key={listName}>
-              <h3>{listName}</h3>
-              <Droppable droppableId={listName} key={listName}>
-                {provided => {
-                  return (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                      {/* 
-            Filter the tasks -> for each task iterate filters ->
-            if filters matches any context of a task: it passes on to
-            .map() and is rendered.
-            If filter array is empty, all tasks pass the filter
-           */}
-                      {tasks.map(
-                        (task, index) =>
-                          /* Apply filters here to whole task list: */
-                          (filters[0] === "all" ||
-                            filters.some(filter =>
-                              task.contexts.includes(filter)
-                            )) &&
-                          /* Check if task is done or not? conditional rendering */
-                          task.status === listName && (
-                            <Draggable
-                              key={task.id}
-                              draggableId={task.id.toString()}
-                              index={index}
-                            >
-                              {provided => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                  >
-                                    {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
-                                    <Task
-                                      contextArray={contextArray}
-                                      tasks={tasks}
-                                      removeTask={removeTask}
-                                      removeContext={removeContext}
-                                      addContext={addContext}
-                                      changeName={changeName}
-                                      task={task}
-                                      key={task.id}
-                                    />
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          )
-                      )}
-                      {provided.placeholder}
-                    </div>
-                  );
-                }}
+          {lists.map(list => (
+            <div key={list.id}>
+              <h3>{list.name}</h3>
+              <Droppable droppableId={list.name} key={list.id}>
+                {provided => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {list.tasks.map((taskId, index) => (
+                      <Draggable
+                        key={taskId}
+                        draggableId={taskId.toString()}
+                        index={index}
+                      >
+                        {provided => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            {/* Render task element: find with current id from tasks
+                             */}
+                            <Task
+                              filters={filters}
+                              listId={list.id}
+                              task={tasks.find(task => task.id === taskId)}
+                              contextArray={contextArray}
+                              changeName={changeName}
+                              removeContext={removeContext}
+                              addContext={addContext}
+                              removeTask={removeTask}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
               </Droppable>
             </div>
           ))}
