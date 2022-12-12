@@ -9,7 +9,7 @@ const Task = props => {
   const id = props.task.id;
   const name = props.task.name;
   const contexts = props.task.contexts;
-  const status = props.task.status;
+  const filters = props.filters;
 
   // this function handles the submit
   const handleNameSubmit = event => {
@@ -17,7 +17,7 @@ const Task = props => {
     event.preventDefault();
     // Calls the changeName function passed down as props
     // Sends user input as parameter
-    props.changeName(id, nameInput, status);
+    props.changeName(id, nameInput);
     // set textbox to empty
     setNameInput("");
   };
@@ -30,66 +30,68 @@ const Task = props => {
     setContextInput("");
   };
 
-  const borderStyle =
-    props.task.status === "done"
-      ? { border: "2px solid green" }
-      : { border: "2px solid blue" };
-
-  return (
-    <div style={borderStyle}>
-      {name}
-      {/* This is a basic react form for updating task name:uses state etc. */}
-      <form type="submit" onSubmit={handleNameSubmit}>
-        <input
-          placeholder="update task name"
-          type="text"
-          value={nameInput}
-          onChange={e => setNameInput(e.target.value)}
-        />
-        <input type="submit" />
-      </form>
-      <section>
-        <p>Contexts:</p>
-        {/* List the contexts: include a remove button for each */}
-        <ul>
-          {contexts.map(context => (
-            <li key={context}>
-              {context}
-              {/* onClick remove, call parent elem. function removecontext */}
-              <button onClick={() => props.removeContext(id, context)}>
-                remove
-              </button>
-            </li>
-          ))}
-        </ul>
-        {/* Basic react form to add a new context: */}
-        <form type="submit" onSubmit={handleContextSubmit}>
+  // Render or not? Depends on filter: "all" = render everything:
+  if (
+    filters[0] === "all" ||
+    contexts.some(context => filters.includes(context))
+  )
+    return (
+      <div style={{ border: "2px solid black" }}>
+        {name}
+        {/* This is a basic react form for updating task name:uses state etc. */}
+        <form type="submit" onSubmit={handleNameSubmit}>
           <input
-            name="textContextInput"
-            placeholder="Add a new context"
+            placeholder="update task name"
             type="text"
-            value={contextInput}
-            onChange={e => setContextInput(e.target.value)}
+            value={nameInput}
+            onChange={e => setNameInput(e.target.value)}
           />
-          {/* Simple html select form: current contexts as options. */}
-          <select
-            name="selectContextInput"
-            value={contextInput}
-            onChange={e => setContextInput(e.target.value)}
-          >
-            {props.contextArray.map(context => (
-              <option key={context} value={context}>
-                {context}
-              </option>
-            ))}
-          </select>
-          <input type="submit" value="Submit" />
+          <input type="submit" />
         </form>
-      </section>
-      {/* A button to remove this task */}
-      <button onClick={() => props.removeTask(id)}>Remove task</button>
-    </div>
-  );
+        <section>
+          <p>Contexts:</p>
+          {/* List the contexts: include a remove button for each */}
+          <ul>
+            {contexts.map(context => (
+              <li key={context}>
+                {context}
+                {/* onClick remove, call parent elem. function removecontext */}
+                <button onClick={() => props.removeContext(id, context)}>
+                  remove
+                </button>
+              </li>
+            ))}
+          </ul>
+          {/* Basic react form to add a new context: */}
+          <form type="submit" onSubmit={handleContextSubmit}>
+            <input
+              name="textContextInput"
+              placeholder="Add a new context"
+              type="text"
+              value={contextInput}
+              onChange={e => setContextInput(e.target.value)}
+            />
+            {/* Simple html select form: current contexts as options. */}
+            <select
+              name="selectContextInput"
+              value={contextInput}
+              onChange={e => setContextInput(e.target.value)}
+            >
+              {props.contextArray.map(context => (
+                <option key={context} value={context}>
+                  {context}
+                </option>
+              ))}
+            </select>
+            <input type="submit" value="Submit" />
+          </form>
+        </section>
+        {/* A button to remove this task */}
+        <button onClick={() => props.removeTask(id, props.listId)}>
+          Remove task
+        </button>
+      </div>
+    );
 };
 
 export default Task;
