@@ -39,16 +39,16 @@ const AddTask = props => {
 
   return (
     <form type="submit" onSubmit={handleTaskSubmit}>
-      <h4>Add a new task</h4>
+      <h4>Uusi tehtävä</h4>
       <input
-        placeholder="Task name"
+        placeholder="Nimi"
         type="text"
         value={nameInput}
         onChange={e => setNameInput(e.target.value)}
       />
       <br />
       <input
-        placeholder="Context name"
+        placeholder="Konteksti"
         type="text"
         value={contextInput}
         onChange={e => setContextInput(e.target.value)}
@@ -66,7 +66,7 @@ const AddTask = props => {
       </select>
       <br />
       <input
-        placeholder="Context name"
+        placeholder="Konteksti"
         type="text"
         value={contextInputTwo}
         onChange={e => setContextInputTwo(e.target.value)}
@@ -84,7 +84,7 @@ const AddTask = props => {
       </select>
       <br />
       <input
-        placeholder="Context name"
+        placeholder="Konteksti"
         type="text"
         value={contextInputThree}
         onChange={e => setContextInputThree(e.target.value)}
@@ -101,7 +101,7 @@ const AddTask = props => {
         ))}
       </select>
       <br />
-      <input type="submit" />
+      <input type="submit" value="Lisää" />
     </form>
   );
 };
