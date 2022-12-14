@@ -7,19 +7,19 @@ import FreeTime from "./components/FreeTime.js";
 
 function App() {
   const navStyle = {
-    padding: 5
+    padding: 5,
   };
   return (
     <BrowserRouter>
       <nav>
         <Link style={navStyle} to="/">
-          Tasks
+          Tehtävät
         </Link>
         <Link style={navStyle} to="/info">
           Info
         </Link>
         <Link style={navStyle} to="/freeTime">
-          Free Time
+          Vapaa aika
         </Link>
       </nav>
       <Routes>
