@@ -4,16 +4,17 @@ const FilterElement = props => {
   // Render the buttons: also include a show all button: clears all filters:
   return (
     <section>
+      <h4>Suodattimet</h4>
       {/* if all active, show all is green */}
       {filters.includes("all") ? (
         <button
           style={{ backgroundColor: "lightGreen" }}
           onClick={() => props.clearFilters()}
         >
-          Show all
+          Näytä kaikki
         </button>
       ) : (
-        <button onClick={() => props.clearFilters()}>Show all</button>
+        <button onClick={() => props.clearFilters()}>Näytä kaikki</button>
       )}
       {/* Iterate contexts: */}
       {props.contextArray.map(context =>
