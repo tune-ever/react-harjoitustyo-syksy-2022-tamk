@@ -1,47 +1,46 @@
 {
   "tasks": [
     {
-      "id": 2,
-      "name": "React programming",
-      "contexts": [
-        "Programming",
-        "Tamk"
-      ]
+      "name": "React harjoitustyö",
+      "contexts": ["Ohjelmointi", "Tamk"],
+      "id": 1
     },
     {
-      "id": 3,
-      "name": "Backend",
-      "contexts": [
-        "Tamk",
-        "Programming"
-      ]
+      "name": "Lepää",
+      "contexts": ["Lepo"],
+      "id": 3
     },
     {
-      "name": "Snow work",
-      "contexts": [
-        "Outside",
-        "Maintenance",
-        "Exercise"
-      ],
+      "name": "Soita Iskälle",
+      "contexts": ["Sosiaalisuus"],
+      "id": 4
+    },
+    {
+      "id": 5,
+      "name": "Käy kaupassa",
+      "contexts": ["Kuntoilu", "Talous"]
+    },
+    {
+      "name": "Backend harjoitustyö",
+      "contexts": ["Tamk", "Ohjelmointi"],
+      "id": 6
+    },
+    {
+      "name": "Imurointi",
+      "contexts": ["Siivous", "Kuntoilu"],
       "id": 7
+    }
+  ],
+  "lists": [
+    {
+      "id": 1,
+      "name": "Tekemättä",
+      "tasks": [7, 4, 5]
     },
     {
-      "name": "Wc stuck",
-      "contexts": [
-        "Inside",
-        "Maintenance"
-      ],
-      "id": 8
-    },
-    {
-      "name": "Drink coffee",
-      "contexts": [
-        "Eating",
-        "Cooking",
-        "Fun",
-        "Inside"
-      ],
-      "id": 10
+      "id": 2,
+      "name": "Valmiit",
+      "tasks": [3, 1, 6]
     }
   ]
 }
