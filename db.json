@@ -2,45 +2,77 @@
   "tasks": [
     {
       "name": "React harjoitustyö",
-      "contexts": ["Ohjelmointi", "Tamk"],
+      "contexts": [
+        "Ohjelmointi",
+        "Tamk"
+      ],
       "id": 1
     },
     {
       "name": "Lepää",
-      "contexts": ["Lepo"],
+      "contexts": [
+        "Lepo"
+      ],
       "id": 3
     },
     {
       "name": "Soita Iskälle",
-      "contexts": ["Sosiaalisuus"],
+      "contexts": [
+        "Sosiaalisuus"
+      ],
       "id": 4
     },
     {
       "id": 5,
       "name": "Käy kaupassa",
-      "contexts": ["Kuntoilu", "Talous"]
+      "contexts": [
+        "Kuntoilu",
+        "Talous"
+      ]
     },
     {
       "name": "Backend harjoitustyö",
-      "contexts": ["Tamk", "Ohjelmointi"],
+      "contexts": [
+        "Tamk",
+        "Ohjelmointi"
+      ],
       "id": 6
     },
     {
       "name": "Imurointi",
-      "contexts": ["Siivous", "Kuntoilu"],
+      "contexts": [
+        "Siivous",
+        "Kuntoilu"
+      ],
       "id": 7
+    },
+    {
+      "name": "Testing",
+      "contexts": [
+        "testa"
+      ],
+      "id": 8
     }
   ],
   "lists": [
     {
       "id": 1,
-      "name": "Tekemättä",
-      "tasks": [7, 4, 5]
+      "name": "Prioriteetti 1",
+      "tasks": [
+        1,
+        7,
+        5
+      ]
     },
     {
       "id": 2,
-      "name": "Valmiit",
-      "tasks": [3, 1, 6]
+      "name": "Prioriteetti 2",
+      "tasks": [
+        6,
+        8,
+        3,
+        4
+      ]
     }
   ]
 }

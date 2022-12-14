@@ -73,7 +73,7 @@ const Tasks = () => {
         const newTask = {
           id: id,
           name: newName,
-          contexts: task.contexts,
+          contexts: task.contexts
         };
         // Here we send the new task to database
         taskService.updateById(id, newTask);
@@ -132,7 +132,7 @@ const Tasks = () => {
   const addTask = async (name, contexts) => {
     const newTask = {
       name: name,
-      contexts: contexts,
+      contexts: contexts
     };
     // Post new task to database
     // Chain of calls:
@@ -167,7 +167,7 @@ const Tasks = () => {
     // Replacing state array of lists:
     const newListsArray = [];
     // Iterate lists, replace source and destination with updated stuff:
-    lists.map(list => {
+    lists.forEach(list => {
       if (list.id === listId) newListsArray.push(listToUpdate);
       else newListsArray.push(list);
     });
@@ -181,9 +181,9 @@ const Tasks = () => {
     setTasks(newTaskList);
 
     // To database we send only the updated tasks array:
-    const response = await listService.updateOrder(listId, updatedTaskList);
+    await listService.updateOrder(listId, updatedTaskList);
     // send the updated tasks list to database:
-    const responseone = await taskService.deleteTask(id);
+    await taskService.deleteTask(id);
   };
 
   // Drag and drop on drag end:
@@ -205,7 +205,7 @@ const Tasks = () => {
       // Replace the one list we want to replace:
       const newListsArray = [];
       // Replace the one we want to update:
-      lists.map(list => {
+      lists.forEach(list => {
         list.name === source.droppableId
           ? newListsArray.push(sourceList)
           : newListsArray.push(list);
@@ -214,9 +214,8 @@ const Tasks = () => {
       setLists(newListsArray);
       // At end send source list to database:
       listService.updateOrder(sourceList.id, sourceList.tasks);
-    }
-    // Different list?
-    else {
+    } else {
+      // Different list?
       // Remove from the source list:
       const elementToRemove = sourceList.tasks.splice(source.index, 1);
       // Add to destination list:
@@ -224,7 +223,7 @@ const Tasks = () => {
       // Replacing state array of lists:
       const newListsArray = [];
       // Iterate lists, replace source and destination with updated stuff:
-      lists.map(list => {
+      lists.forEach(list => {
         if (list.name === source.droppableId) newListsArray.push(sourceList);
         else if (list.name === destination.droppableId)
           newListsArray.push(destinationList);
@@ -233,15 +232,9 @@ const Tasks = () => {
       // Update to state:
       setLists(newListsArray);
       // At end send source and destination lists to database async api calls:
-      const response = await listService.updateOrder(
-        sourceList.id,
-        sourceList.tasks
-      );
+      await listService.updateOrder(sourceList.id, sourceList.tasks);
       // Async api call:
-      const responseTwo = await listService.updateOrder(
-        destinationList.id,
-        destinationList.tasks
-      );
+      await listService.updateOrder(destinationList.id, destinationList.tasks);
     }
   };
 
