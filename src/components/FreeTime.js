@@ -1,17 +1,13 @@
 const FreeTime = () => {
   return (
     <div>
-      <article>
-        Here is some activies suggestions if you have no active tasks
-      </article>
+      <article>Eikö sinulla ole tehtäviä? Tässä ehdotuksia.</article>
       <ul>
-        <li>Eat candy</li>
-        <li>Visit a friend</li>
-        <li>Drink tea</li>
-        <li>Watch sports</li>
-        <li>Go for a walk</li>
-        <li>Watch a movie</li>
-        <li>Call your mom</li>
+        <li>Syö karkkia.</li>
+        <li>Katso elokuva.</li>
+        <li>Juo teetä.</li>
+        <li>Soita kaverille.</li>
+        <li>Mene kävelylle.</li>
       </ul>
     </div>
   );
