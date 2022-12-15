@@ -3,6 +3,7 @@ import Task from "./Task.js";
 import taskService from "../services/taskService";
 import AddTask from "./AddTask";
 import FilterElement from "./FilterElement";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const Tasks = () => {
   // One state to store all the tasks in an array:
@@ -11,6 +12,7 @@ const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [filters, setFilters] = useState(["all"]);
 
+  console.log(tasks);
   // First page load -> get tasks from db.json
   useEffect(() => {
     taskService.getAll().then(res => setTasks(res.data));
@@ -189,6 +191,18 @@ const Tasks = () => {
     isActive ? sendEndTime(id, timeNow) : sendStartTime(id, timeNow);
   };
 
+  const onDragEnd = result => {
+    // new arrangement of items updating to state:
+    const newOrder = tasks;
+    // remove item from source index: splice returns an array:
+    const itemToMove = newOrder.splice(result.source.index, 1);
+    // Insert same item to dest. index: array destructures to an object...
+    newOrder.splice(result.destination.index, 0, ...itemToMove);
+
+    // Update this new order to state:
+    setTasks(newOrder);
+  };
+
   return (
     <div>
       <h2>Tasks</h2>
@@ -200,32 +214,47 @@ const Tasks = () => {
           handleFilterClick={handleFilterClick}
           filters={filters}
         />
-        <ol>
-          {/* 
-            Filter the tasks -> for each task iterate filters ->
-            if filters matches any context of a task: it passes on to
-            .map() and is rendered.
-            If filter array is empty, all tasks pass the filter
-           */}
-          {tasks.map(task => (
-            <li key={task.id}>
-              {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
-              <Task
-                activate={activate}
-                sendStartTime={sendStartTime}
-                sendEndTime={sendEndTime}
-                filters={filters}
-                contextArray={contextArray}
-                removeTask={removeTask}
-                removeContext={removeContext}
-                addContext={addContext}
-                changeName={changeName}
-                task={task}
-                key={task.id}
-              />
-            </li>
-          ))}
-        </ol>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div>
+            <Droppable droppableId="1" key="1">
+              {provided => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {tasks.map((task, index) => (
+                    <Draggable
+                      key={task.id}
+                      draggableId={task.id.toString()}
+                      index={index}
+                    >
+                      {provided => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
+                          <Task
+                            activate={activate}
+                            sendStartTime={sendStartTime}
+                            sendEndTime={sendEndTime}
+                            filters={filters}
+                            contextArray={contextArray}
+                            removeTask={removeTask}
+                            removeContext={removeContext}
+                            addContext={addContext}
+                            changeName={changeName}
+                            task={task}
+                            key={task.id}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </div>
+        </DragDropContext>
       </section>
       <AddTask tasks={tasks} addTask={addTask} />
     </div>
