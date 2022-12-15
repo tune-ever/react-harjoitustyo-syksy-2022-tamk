@@ -12,7 +12,6 @@ const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [filters, setFilters] = useState(["all"]);
 
-  console.log(tasks);
   // First page load -> get tasks from db.json
   useEffect(() => {
     taskService.getAll().then(res => setTasks(res.data));
