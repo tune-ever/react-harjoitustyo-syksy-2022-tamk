@@ -18,7 +18,8 @@ const updateById = async (id, task) => {
 
 // Post:
 const addTask = async task => {
-  axios.post(url, task);
+  const response = await axios.post(url, task);
+  return response;
 };
 
 // Delete:
