@@ -22,6 +22,15 @@ const Info = () => {
           Add a new task: scroll to the bottom of the page: type task name and
           contexts, then press submit button
         </li>
+        <li>
+          Order tasks: drag and drop with mouse.(click and hold mouse button.)
+        </li>
+        <li>
+          Activate time counting: press start. Times are recorded to database.
+        </li>
+        <li>
+          Filtering tasks: Press filter buttons: show all clears everything.
+        </li>
       </ul>
       <footer>No copyright material have been used on this site.</footer>
     </div>
