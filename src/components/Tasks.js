@@ -6,6 +6,8 @@ import FilterElement from "./FilterElement";
 
 const Tasks = () => {
   // One state to store all the tasks in an array:
+  // this is the main source of truth for the app.
+  // tasks state is kept in sync with backend with different backend calls:
   const [tasks, setTasks] = useState([]);
   const [filters, setFilters] = useState(["all"]);
 
@@ -95,6 +97,36 @@ const Tasks = () => {
     setTasks(newTasksArray);
   };
 
+  // Function to add time: same logic as adding context:
+  const sendStartTime = (id, time) => {
+    const newTasksArray = [];
+    // Iterate tasks, find match, add the new time
+    tasks.forEach(task => {
+      if (task.id === id) {
+        task.timerStarts.push(time);
+        // Update this specific task in db: sends new timer event
+        taskService.updateById(id, task);
+      }
+      newTasksArray.push(task);
+    });
+    setTasks(newTasksArray);
+  };
+
+  // Function to add time: same logic as adding context:
+  const sendEndTime = (id, time) => {
+    const newTasksArray = [];
+    // Iterate tasks, find match, add the new time
+    tasks.forEach(task => {
+      if (task.id === id) {
+        task.timerEnds.push(time);
+        // Update this specific task in array: sends new timer event
+        taskService.updateById(id, task);
+      }
+      newTasksArray.push(task);
+    });
+    setTasks(newTasksArray);
+  };
+
   // Function to remove a context:
   const removeContext = (id, contextToRemove) => {
     const newTasksArray = [];
@@ -122,6 +154,8 @@ const Tasks = () => {
     const newTask = {
       name: name,
       contexts: contexts,
+      timerStarts: [],
+      timerEnds: [],
     };
     // Post new task to database
     // Chain of calls:
@@ -144,6 +178,17 @@ const Tasks = () => {
     setTasks(newTaskList);
   };
 
+  // This function sets activity status and sends times:
+  const activate = id => {
+    // is task active now?
+    const thisTask = tasks.find(task => task.id === id);
+    const isActive = thisTask.timerStarts.length > thisTask.timerEnds.length;
+
+    // Get time now in json format:
+    const timeNow = new Date().toJSON();
+    isActive ? sendEndTime(id, timeNow) : sendStartTime(id, timeNow);
+  };
+
   return (
     <div>
       <h2>Tasks</h2>
@@ -162,25 +207,24 @@ const Tasks = () => {
             .map() and is rendered.
             If filter array is empty, all tasks pass the filter
            */}
-          {tasks.map(
-            task =>
-              (filters[0] === "all" ||
-                filters.some(filter => task.contexts.includes(filter))) && (
-                <li key={task.id}>
-                  {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
-                  <Task
-                    contextArray={contextArray}
-                    tasks={tasks}
-                    removeTask={removeTask}
-                    removeContext={removeContext}
-                    addContext={addContext}
-                    changeName={changeName}
-                    task={task}
-                    key={task.id}
-                  />
-                </li>
-              )
-          )}
+          {tasks.map(task => (
+            <li key={task.id}>
+              {/* Props: function removeTask, function addContext, function changeName, task object, key*/}
+              <Task
+                activate={activate}
+                sendStartTime={sendStartTime}
+                sendEndTime={sendEndTime}
+                filters={filters}
+                contextArray={contextArray}
+                removeTask={removeTask}
+                removeContext={removeContext}
+                addContext={addContext}
+                changeName={changeName}
+                task={task}
+                key={task.id}
+              />
+            </li>
+          ))}
         </ol>
       </section>
       <AddTask tasks={tasks} addTask={addTask} />
