@@ -6,32 +6,31 @@ const url = "http://localhost:3010/tasks";
 
 // Get:
 const getAll = async () => {
-    const response = await axios.get(url);
-    return response;
+  const response = await axios.get(url);
+  return response;
 };
 
-// Put:
+// Put: update single task
 const updateById = async (id, task) => {
-    // Simple put request to db: body is new task
-    axios.put(`${url}/${id}`, task);
+  // Simple put request to db: body is new task
+  await axios.put(`${url}/${id}`, task);
 };
 
 // Post:
-const addTask = async (task) => {
-    const response = await axios.post(url, task);
-    return response;
+const addTask = async task => {
+  axios.post(url, task);
 };
 
 // Delete:
-const deleteTask = async (id) => {
-    axios.delete(`${url}/${id}`);
+const deleteTask = async id => {
+  axios.delete(`${url}/${id}`);
 };
 
 const taskService = {
-    getAll,
-    updateById,
-    deleteTask,
-    addTask,
+  getAll,
+  updateById,
+  deleteTask,
+  addTask,
 };
 
 export default taskService;
