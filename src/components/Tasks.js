@@ -66,6 +66,8 @@ const Tasks = () => {
           id: id,
           name: newName,
           contexts: task.contexts,
+          timerStarts: task.timerStarts,
+          timerEnds: task.timerEnds,
         };
         // Here we send the new task to database
         taskService.updateById(id, newTask);
@@ -186,6 +188,7 @@ const Tasks = () => {
     const isActive = thisTask.timerStarts.length > thisTask.timerEnds.length;
 
     // Get time now in json format:
+
     const timeNow = new Date().toJSON();
     isActive ? sendEndTime(id, timeNow) : sendStartTime(id, timeNow);
   };
