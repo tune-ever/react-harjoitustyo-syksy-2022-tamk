@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+/* Fixing some console erros with this: */
+.react-date-picker__calendar {
+  position: absolute;
+}
