@@ -5,8 +5,8 @@ const Info = () => {
       <article>Creator: Andreas Achte</article>
       <br />
       <article>
-        Tasks page: you can view a list of current tasks. You can add new tasks,
-        rename current tasks and edit the contexts of the tasks.
+        <b>Tasks</b> page: you can view a list of current tasks. You can add new
+        tasks, rename current tasks and edit the contexts of the tasks.
       </article>
       <ul>
         <li>
@@ -31,6 +31,17 @@ const Info = () => {
         <li>
           Filtering tasks: Press filter buttons: show all clears everything.
         </li>
+      </ul>
+      <article>
+        <b>Time</b> page: show time active for tasks. You can select different
+        periods.
+      </article>
+      <ul>
+        <li>
+          Start time: set starting time for the time period you want to see.
+        </li>
+        <li>End time: set end time for the time period you want to see.</li>
+        <li>Total time is displayed for each task individually.</li>
       </ul>
       <footer>No copyright material have been used on this site.</footer>
     </div>
