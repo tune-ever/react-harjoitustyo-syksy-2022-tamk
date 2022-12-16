@@ -47,7 +47,7 @@ const Task = props => {
         <section style={{ fontSize: "20px", fontStyle: "italic" }}>
           {active ? (
             <div style={{ border: "5px solid green" }}>
-              <p>Active</p>
+              <p>Active - counting time</p>
               <button onClick={() => props.activate(id)}>STOP</button>
             </div>
           ) : (
