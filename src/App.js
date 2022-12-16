@@ -3,11 +3,11 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Tasks from "./components/Tasks.js";
 import Info from "./components/Info.js";
-import FreeTime from "./components/FreeTime.js";
+import Time from "./components/Time.js";
 
 function App() {
   const navStyle = {
-    padding: 5
+    padding: 5,
   };
   return (
     <BrowserRouter>
@@ -15,17 +15,17 @@ function App() {
         <Link style={navStyle} to="/">
           Tasks
         </Link>
+        <Link style={navStyle} to="/Time">
+          Time
+        </Link>
         <Link style={navStyle} to="/info">
           Info
-        </Link>
-        <Link style={navStyle} to="/freeTime">
-          Free Time
         </Link>
       </nav>
       <Routes>
         <Route path="/" element={<Tasks />} />
+        <Route path="/time" element={<Time />} />
         <Route path="/info" element={<Info />} />
-        <Route path="/freeTime" element={<FreeTime />} />
       </Routes>
     </BrowserRouter>
   );
