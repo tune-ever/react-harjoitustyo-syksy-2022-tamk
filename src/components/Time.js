@@ -1,5 +1,4 @@
 import DateTimePicker from "react-datetime-picker";
-import TimePicker from "react-time-picker";
 import { useState, useEffect } from "react";
 import taskService from "../services/taskService";
 import {
@@ -18,7 +17,6 @@ const Time = () => {
   // starttime start of today:
   const [startTime, onChangeStart] = useState(new Date(today));
   const [endTime, onChangeEnd] = useState();
-  const [intervalTimes, onChange] = useState([]);
 
   // tasks
   const [tasks, setTasks] = useState([]);
@@ -65,7 +63,7 @@ const Time = () => {
 
   const calculateTimeForContext = context => {
     let totalContextTime = 0;
-    tasks.map(task => {
+    tasks.forEach(task => {
       task.contexts.includes(context) &&
         (totalContextTime += calculateActiveTime(task));
     });
