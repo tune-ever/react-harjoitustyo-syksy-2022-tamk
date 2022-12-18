@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { differenceInMinutes, parseJSON } from "date-fns";
 
 // This component has basic react form inputs: state helps keep track of input:
 const Task = props => {
@@ -48,6 +49,13 @@ const Task = props => {
           {active ? (
             <div style={{ border: "5px solid green" }}>
               <p>Active - counting time</p>
+              {active &&
+                differenceInMinutes(
+                  parseJSON(parseJSON(new Date())),
+                  parseJSON(timerStarts[timerStarts.length - 1])
+                )}
+              minutes
+              <br />
               <button onClick={() => props.activate(id)}>STOP</button>
             </div>
           ) : (
