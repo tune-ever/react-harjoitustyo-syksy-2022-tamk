@@ -41,7 +41,11 @@ const Info = () => {
           Start time: set starting time for the time period you want to see.
         </li>
         <li>End time: set end time for the time period you want to see.</li>
-        <li>Total time is displayed for each task individually.</li>
+        <li>Total time is displayed for each task and context individually.</li>
+        <li>
+          Edit task intervals: find the task you want to edit: then just select
+          start time and click edit. Same for task interval's ending time.
+        </li>
       </ul>
       <footer>No copyright material have been used on this site.</footer>
     </div>
