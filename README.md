@@ -8,4 +8,4 @@
 
 -npm run json-server (open devel. database.)
 
--npm start
+-npm start (another console)
